@@ -2,7 +2,7 @@
 Android app sample code in JAVA to integrate Android mobile app with WordPress push notification plugin - PNFPB Push notification for Post and BuddyPress.
 PNFPB plugin is designed to send push notifications using Firebase Cloud Messaging (FCM) to websites, Android/iOS mobile apps. This plugin has REST API facility to integrate with native/hybrid Android/iOS mobile apps for push notifications. <br/><br/>
 
-# Download Push notification plugin<br/>
+# Download Push notification plugin from WordPress.org repository<br/>
 https://wordpress.org/plugins/push-notification-for-post-and-buddypress/<br/><br/>
 It sends notification whenever new WordPress post, custom post types,new BuddyPress activities,comments published. It has facility to generate PWA - Progressive Web App. This plugin is able to send push notification to more than 200,000 subscribers unlimited push notifications using background action scheduler.
 
