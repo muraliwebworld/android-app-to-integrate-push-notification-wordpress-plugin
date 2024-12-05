@@ -1,4 +1,4 @@
-package com.example.PnfpbAndroid;
+package com.sample.pnfpbandroid;
 
 import org.junit.Test;
 

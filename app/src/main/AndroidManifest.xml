@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PnfpbAndroid"
+        android:theme="@style/Theme.AquariumNetwork"
         tools:targetApi="31">
         <!-- [START fcm_default_icon] -->
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -26,9 +26,9 @@
             android:resource="@mipmap/ic_launcher_round" />
         <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more. -->
-        <!--meta-data
+        <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" / -->
+            android:resource="@color/colorAccent" />
         <!-- [END fcm_default_icon] -->
         <!-- [START fcm_default_channel] -->
         <meta-data
@@ -51,6 +51,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="OPEN_MAIN_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>            
         </activity>
         <!-- [START firebase_service] -->
         <service

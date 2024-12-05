@@ -27,7 +27,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-//import com.sample.pnfpbandroid.R;
+
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import android.util.Log;
@@ -67,19 +67,33 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int NOTIFICATION_REQUEST_CODE = 1234;
     private static final String USER_AGENT = "Mozilla/5.0";
-    private static final String POST_URL = "https://www.PnfpbAndroid.com.au/wp-json/PNFPBpush/v1/subscriptiontoken";
+    private static final String POST_URL = "https://www.muraliwebworld.com/wp-json/PNFPBpush/v1/subscriptiontoken";
     public String POST_PARAMS = "";
     private ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> uploadMessage;
     public static final int REQUEST_SELECT_FILE = 100;
     private final static int FILECHOOSER_RESULTCODE = 1;
 
-    public String intentUrl = "";
+    public String intentUrl = "https://www.muraliwebworld.com";
 
     EncryptedDataHolder encryptedDataHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent intent = this.getIntent();
+        Log.d(TAG, "test-------->");
+        Log.d(TAG, intent.toString());
+        Bundle extras = getIntent().getExtras();
+
+        Log.d(TAG, "extras");
+        if(extras != null){
+            Log.d(TAG, extras.toString());
+            if(extras.containsKey("URL"))
+            {
+                intentUrl = extras.getString("URL");
+            }
+        }
 
         super.onCreate(savedInstanceState);
 
@@ -90,25 +104,24 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             encryptedDataHolder = new EncryptedDataHolder(this);
         }
-        encryptedDataHolder.setApiKey("5c51cbed3343c3df0b9a0150ce4d29e9");
+        encryptedDataHolder.setApiKey("<Your security key generated from PNFPB plugin under mobile app admin settings tab>");
 
         mywebView=(WebView) findViewById(R.id.webview);
         progressBar = findViewById(R.id.progress);
         swipeRefreshLayout = findViewById(R.id.swipe);
 
+
+
+
         mywebView.setWebViewClient(new myWebViewClient());
-        intentUrl = "https://www.PnfpbAndroid.com.au/";
 
-        Bundle extras = getIntent().getExtras();
-
-        if(extras != null){
-            if(extras.containsKey("URL"))
-            {
-                intentUrl = extras.getString("URL");
-            }
+        if (intentUrl != null) {
+            mywebView.loadUrl(intentUrl);
+        } else {
+            intentUrl = "https://www.muraliwebworld.com/";
+            mywebView.loadUrl("https://www.muraliwebworld.com/");
         }
 
-        mywebView.loadUrl(intentUrl);
 
         WebSettings webSettings=mywebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -116,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         mywebView.getSettings().setMinimumFontSize(1);
         mywebView.getSettings().setMinimumLogicalFontSize(1);
         mywebView.setClickable(true);
+        send_Firebase_tokens_tobackend();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -124,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
-                        mywebView.loadUrl("https://www.PnfpbAndroid.com.au/");
+                        mywebView.loadUrl(intentUrl);
+                        send_Firebase_tokens_tobackend();
                     }
                 },  3000);
             }
@@ -228,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void  send_Firebase_tokens_tobackend() {
-          FirebaseMessaging.getInstance().getToken()
+        FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
@@ -243,8 +258,36 @@ public class MainActivity extends AppCompatActivity {
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
                         String secret = encryptedDataHolder.getApiKey();
-                         try {
-                            final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                        try {
+                            /*** NEW method of encrypting using AES GCM Nopadding - 2024 */
+                            SecureRandom secureRandom = new SecureRandom();
+							byte[] iv = new byte[16]; // GCM mode typically uses a 12-byte IV
+							secureRandom.nextBytes(iv);
+							IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+							// Create an AES key from the secret
+							SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
+
+							// Initialize Cipher in AES/GCM/NoPadding mode
+							Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+							cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
+
+							// Encrypt the token
+							byte[] encryptedToken = cipher.doFinal(token.getBytes("UTF-8"));
+							String finalresultstring = Base64.encodeToString(encryptedToken, Base64.NO_WRAP);
+							String ivString = Base64.encodeToString(iv, Base64.NO_WRAP);
+
+							// HMAC calculation for integrity check (if needed)
+							Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+							sha256_HMAC.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
+							byte[] hmacBytes = sha256_HMAC.doFinal(token.getBytes("UTF-8"));
+							StringBuilder byteContent = new StringBuilder();
+							for (byte b : hmacBytes)
+							{
+								byteContent.append(String.format("%02x", b));
+							}
+                            /*** old method of encrypting using PKCS5PADDING CBC */
+                           /*final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
                             byte[] tokenbyte_string = token.getBytes();
                             byte[] iv = new byte[16];
@@ -258,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
                             StringBuilder byteContent = new StringBuilder();
                             for(byte b: hmacstring1){
                                 byteContent.append(String.format("%02x",b));
-                            }
+                            }*/
                             String ivstring = Base64.encodeToString(iv, Base64.NO_WRAP);
                             POST_PARAMS = finalresultstring + ":" + ivstring + ":" + byteContent + ":" + byteContent;
                             postRequest(POST_PARAMS);
@@ -269,8 +312,9 @@ public class MainActivity extends AppCompatActivity {
                             mywebView.addJavascriptInterface(new JavaScriptInterface(token,"subscribe_group",encryptedDataHolder), "subscribeGroupid");
                             mywebView.addJavascriptInterface(new JavaScriptInterface(token,"unsubscribe_group",encryptedDataHolder), "unsubscribeGroupid");
                             mywebView.addJavascriptInterface(new JavaScriptInterface(token,"frontendsubscriptionOptions",encryptedDataHolder), "frontendsubscriptionOptions");
-                             mywebView.addJavascriptInterface(new JavaScriptInterface(token,"pnfpbuserid",encryptedDataHolder), "pnfpbuserid");
+                            mywebView.addJavascriptInterface(new JavaScriptInterface(token,"pnfpbuserid",encryptedDataHolder), "pnfpbuserid");
                             mywebView.loadUrl("javascript:PNFPB_from_Java_androidapp(token)");
+                            Log.d("token",token);
                         } catch (Exception e) {
                             Log.d(TAG, String.valueOf(e));
                         }
@@ -348,6 +392,7 @@ public class MainActivity extends AppCompatActivity {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
+            //send_Firebase_tokens_tobackend();
         }
     }
 
@@ -412,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
     private void askNotificationPermission() {
-       // Toast.makeText(MainActivity.this, "askNotificationPermission", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(MainActivity.this, "askNotificationPermission", Toast.LENGTH_SHORT).show();
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==

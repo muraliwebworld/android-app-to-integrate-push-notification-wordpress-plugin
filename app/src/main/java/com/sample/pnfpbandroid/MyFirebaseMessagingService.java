@@ -31,14 +31,19 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
+//import com.aquariumnetwork.aquariumnetwork.R;
 
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 
+
+/*public class MyFirebaseMessagingService {
+    private static final String TAG = "MyFirebaseMsgService";
+}*/
 /**
  * NOTE: There can only be one service in each app that receives FCM messages. If multiple
  * are declared in the Manifest then the first one will be chosen.
@@ -103,11 +108,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Uri notificationImage = remoteMessage.getNotification().getImageUrl();
             String notificationBody = remoteMessage.getNotification().getBody();
             String pnfpb_click_url = remoteMessage.getData().get("click_url");
+            String thread_id = remoteMessage.getData().get("thread_id");
+            Log.d(TAG, "pnfpb_click_url");
+            Log.d(TAG, "thread_id");
+           // Log.d(TAG, thread_id);
             if (pnfpb_click_url == null) {
-                pnfpb_click_url = "https://www.PnfpbAndroid.com.au/";
+                pnfpb_click_url = "https://www.muraliwebworld.com";
+            }
+            else {
+                Log.d(TAG, pnfpb_click_url);
+            }
+            if (thread_id == null) {
+                thread_id = "https://www.muraliwebworld.com";
+            }
+            else {
+                Log.d(TAG, thread_id);
             }
             if (remoteMessage.getNotification().getBody() != null) {
-                sendNotification(notificationTitle,notificationBody,notificationImage,pnfpb_click_url);
+                displayNotification(notificationTitle,notificationBody,notificationImage,pnfpb_click_url);
             }
         }
 
@@ -173,13 +191,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageTitle,String messageBody, Uri pushimageUrl, String pnfpb_click_url) {
+    private void displayNotification(String messageTitle,String messageBody, Uri pushimageUrl, String pnfpb_click_url) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("URL", pnfpb_click_url);
+        Log.d(TAG, "url--->"+pnfpb_click_url);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        Log.d(TAG, intent.toString());
         intent.setAction(Long.toString(System.currentTimeMillis()));
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_IMMUTABLE);
+        Random objRandom = new Random();
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_IMMUTABLE);
+
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
         try {
             URL url = new URL(String.valueOf(pushimageUrl));
@@ -211,7 +233,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
-
+        //notificationBuilder.setContentIntent(pendingIntent);
+        Log.d(TAG, pendingIntent.toString());
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 }

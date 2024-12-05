@@ -2,8 +2,6 @@ package com.sample.pnfpbandroid;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
@@ -14,6 +12,7 @@ import org.json.JSONObject;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -33,7 +32,7 @@ public class JavaScriptInterface {
     String PNFPB_token;
     String PNFPB_subscription;
 
-    private static final String POST_URL = "https://www.PnfpbAndroid.com.au/wp-json/PNFPBpush/v1/subscriptiontoken";
+    private static final String POST_URL = "https://www.muraliwebworld.com/wp-json/PNFPBpush/v1/subscriptiontoken";
     public String POST_PARAMS = "";
 
     EncryptedDataHolder encryptedDataHolder;
@@ -42,6 +41,7 @@ public class JavaScriptInterface {
         PNFPB_token = PNFPB_token_param;
         PNFPB_subscription = PNFPB_group_subscription;
         encryptedDataHolder = encrypteddataHolder;
+        //Log.d(TAG, "Frontend subscription ");
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         //    encryptedDataHolder = new EncryptedDataHolder(JavaScriptInterface);
         //}
@@ -52,7 +52,7 @@ public class JavaScriptInterface {
     }
     @JavascriptInterface
     public void postMessage(String subscriptionoptions) {
-        //Log.d(TAG, "Frontend subscription " + subscriptionoptions);
+        Log.d(TAG, "Frontend subscription " + subscriptionoptions);
         //return false; // here we return true if we handled the post.
 
         String token = PNFPB_token;
@@ -61,7 +61,35 @@ public class JavaScriptInterface {
         //String msg = getString(R.string.msg_token_fmt, token);
         String secret = encryptedDataHolder.getApiKey();
         try {
-            final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+            SecureRandom secureRandom = new SecureRandom();
+            byte[] iv = new byte[16]; // GCM mode typically uses a 12-byte IV
+            secureRandom.nextBytes(iv);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            // Create an AES key from the secret
+            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
+
+            // Initialize Cipher in AES/GCM/NoPadding mode
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
+
+            // Encrypt the token
+            byte[] encryptedToken = cipher.doFinal(token.getBytes("UTF-8"));
+            String finalresultstring = Base64.encodeToString(encryptedToken, Base64.NO_WRAP);
+            String ivString = Base64.encodeToString(iv, Base64.NO_WRAP);
+
+            // HMAC calculation for integrity check (if needed)
+            Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+            sha256_HMAC.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
+            byte[] hmacBytes = sha256_HMAC.doFinal(token.getBytes("UTF-8"));
+            StringBuilder byteContent = new StringBuilder();
+            for (byte b : hmacBytes)
+            {
+                byteContent.append(String.format("%02x", b));
+            }
+
+            /*final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
             byte[] tokenbyte_string = token.getBytes();
             byte[] iv = new byte[16];
@@ -75,7 +103,8 @@ public class JavaScriptInterface {
             StringBuilder byteContent = new StringBuilder();
             for(byte b: hmacstring1){
                 byteContent.append(String.format("%02x",b));
-            }
+            }*/
+    
             String ivstring = Base64.encodeToString(iv, Base64.NO_WRAP);
             POST_PARAMS = finalresultstring + ":" + ivstring + ":" + byteContent + ":" + byteContent;
             postsubscriptionoptionsRequest(POST_PARAMS,subscriptionoptions);
@@ -91,6 +120,7 @@ public class JavaScriptInterface {
         Log.d(TAG, "Frontend subscription " + subscriptionoptions);
         Log.d(TAG, "token " + PNFPB_token);
         Log.d(TAG, "PNFPB_subscription " + PNFPB_subscription);
+        Log.d(TAG, "pnfpbuserid " + PNFPB_subscription);
         // create your json here
         JSONObject jsonObject = new JSONObject();
         try {
