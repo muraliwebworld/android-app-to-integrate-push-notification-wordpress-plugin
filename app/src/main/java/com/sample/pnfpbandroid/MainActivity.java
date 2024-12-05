@@ -261,31 +261,27 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             /*** NEW method of encrypting using AES GCM Nopadding - 2024 */
                             SecureRandom secureRandom = new SecureRandom();
-							byte[] iv = new byte[16]; // GCM mode typically uses a 12-byte IV
-							secureRandom.nextBytes(iv);
-							IvParameterSpec ivSpec = new IvParameterSpec(iv);
-
-							// Create an AES key from the secret
-							SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
-
-							// Initialize Cipher in AES/GCM/NoPadding mode
-							Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-							cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
-
+                            byte[] iv = new byte[16]; // GCM mode typically uses a 12-byte IV
+                            secureRandom.nextBytes(iv);
+                            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+                            // Create an AES key from the secret
+                            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
+                            // Initialize Cipher in AES/GCM/NoPadding mode
+                            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+                            cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
 							// Encrypt the token
-							byte[] encryptedToken = cipher.doFinal(token.getBytes("UTF-8"));
-							String finalresultstring = Base64.encodeToString(encryptedToken, Base64.NO_WRAP);
-							String ivString = Base64.encodeToString(iv, Base64.NO_WRAP);
-
-							// HMAC calculation for integrity check (if needed)
-							Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-							sha256_HMAC.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
-							byte[] hmacBytes = sha256_HMAC.doFinal(token.getBytes("UTF-8"));
-							StringBuilder byteContent = new StringBuilder();
-							for (byte b : hmacBytes)
-							{
-								byteContent.append(String.format("%02x", b));
-							}
+                            byte[] encryptedToken = cipher.doFinal(token.getBytes("UTF-8"));
+                            String finalresultstring = Base64.encodeToString(encryptedToken, Base64.NO_WRAP);
+                            String ivString = Base64.encodeToString(iv, Base64.NO_WRAP);
+                            // HMAC calculation for integrity check (if needed)
+                            Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+                            sha256_HMAC.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
+                            byte[] hmacBytes = sha256_HMAC.doFinal(token.getBytes("UTF-8"));
+                            StringBuilder byteContent = new StringBuilder();
+                            for (byte b : hmacBytes)
+                            {
+                                byteContent.append(String.format("%02x", b));
+                            }
                             /*** old method of encrypting using PKCS5PADDING CBC */
                            /*final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
                             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
