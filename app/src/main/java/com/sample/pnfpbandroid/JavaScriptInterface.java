@@ -66,19 +66,15 @@ public class JavaScriptInterface {
             byte[] iv = new byte[16]; // GCM mode typically uses a 12-byte IV
             secureRandom.nextBytes(iv);
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
-
             // Create an AES key from the secret
             SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
-
             // Initialize Cipher in AES/GCM/NoPadding mode
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
-
             // Encrypt the token
             byte[] encryptedToken = cipher.doFinal(token.getBytes("UTF-8"));
             String finalresultstring = Base64.encodeToString(encryptedToken, Base64.NO_WRAP);
             String ivString = Base64.encodeToString(iv, Base64.NO_WRAP);
-
             // HMAC calculation for integrity check (if needed)
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
             sha256_HMAC.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
