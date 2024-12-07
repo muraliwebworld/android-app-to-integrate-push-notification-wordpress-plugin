@@ -36,7 +36,7 @@ Once plugin receives this token, it will unencrypt using the secret key generate
 
 Firebase httpv1 version requires separate intent filter, please use intent filter for mainactivity like below
 
-'''XML
+```XML
         <activity
                 android:name=".MainActivity"
                 android:exported="true">
@@ -49,12 +49,12 @@ Firebase httpv1 version requires separate intent filter, please use intent filte
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-'''
+```
 Following is optional, Google requires encryption needs to be AES/GCM/NoPadding, Following is updated encryption logic using AES/GCM/NoPadding, at present plugin works for both old encryption method (AES/CBC/PKCS5Padding) as well as for new method AES/GCM/NoPadding.
 
 Following is example code encryption using AES/GCM/NoPadding to connect to PNFPB plugin REST API
 
-'''JAVA
+```JAVA
     /*** NEW method of encrypting using AES GCM Nopadding - 2024 */
      SecureRandom secureRandom = new SecureRandom();
      byte[] iv = new byte[16]; // GCM mode typically uses a 12-byte IV
@@ -81,8 +81,7 @@ Following is example code encryption using AES/GCM/NoPadding to connect to PNFPB
      POST_PARAMS = finalresultstring + ":" + ivstring + ":" + byteContent + ":" + byteContent;
      postRequest(POST_PARAMS);
      WebSettings settings = mywebView.getSettings();
-    '''
-
+```
 
 # Video tutorial showing how to configure Firebase for this plugin<br />
 
