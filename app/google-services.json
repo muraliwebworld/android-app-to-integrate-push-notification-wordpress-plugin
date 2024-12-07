@@ -1,3 +1,29 @@
 {
-  
-}
+    "project_info": {
+      "project_number": "101678953535",
+      "project_id": "pnfpb-demo2",
+      "storage_bucket": "pnfpb-demo2.fire.app"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:101678953535:android:c6a3345345c7e3ddac6c9ca",
+          "android_client_info": {
+            "package_name": "com.pnfpb.demoapp2"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyAw3436346JKw76JSJjp5fmxgRHVG6Y"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

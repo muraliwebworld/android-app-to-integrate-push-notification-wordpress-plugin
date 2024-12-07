@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             encryptedDataHolder = new EncryptedDataHolder(this);
         }
-        encryptedDataHolder.setApiKey("<Your security key generated from PNFPB plugin under mobile app admin settings tab>");
+        //Your security key generated from PNFPB plugin under mobile app admin settings tab
+        encryptedDataHolder.setApiKey("4344353432343xfd");
 
         mywebView=(WebView) findViewById(R.id.webview);
         progressBar = findViewById(R.id.progress);
