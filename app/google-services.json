@@ -9,7 +9,7 @@
         "client_info": {
           "mobilesdk_app_id": "1:101678953535:android:c6a3345345c7e3ddac6c9ca",
           "android_client_info": {
-            "package_name": "com.pnfpb.demoapp2"
+            "package_name": "com.sample.pnfpbandroid"
           }
         },
         "oauth_client": [],
