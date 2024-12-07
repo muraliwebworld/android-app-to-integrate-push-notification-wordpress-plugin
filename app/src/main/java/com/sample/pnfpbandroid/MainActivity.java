@@ -45,11 +45,13 @@ import org.json.JSONObject;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
 import java.io.IOException;
+import java.security.SecureRandom;
 
 import okhttp3.Call;
 import okhttp3.Callback;
