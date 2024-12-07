@@ -34,7 +34,59 @@ store token in global variable for other user
 Generate envrypted token as mentioned below using below coding (AES 256 cryptography encryption)
 Once plugin receives this token, it will unencrypt using the secret key generate and compare hash code to confirm it is sent from mobile app
 
+Firebase httpv1 version requires separate intent filter, please use intent filter for mainactivity like below
+
+'''XML
+        <activity
+                android:name=".MainActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="OPEN_MAIN_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+'''
+Following is optional, Google requires encryption needs to be AES/GCM/NoPadding, Following is updated encryption logic using AES/GCM/NoPadding, at present plugin works for both old encryption method (AES/CBC/PKCS5Padding) as well as for new method AES/GCM/NoPadding.
+
+Following is example code encryption using AES/GCM/NoPadding to connect to PNFPB plugin REST API
+
+'''JAVA
+    /*** NEW method of encrypting using AES GCM Nopadding - 2024 */
+     SecureRandom secureRandom = new SecureRandom();
+     byte[] iv = new byte[16]; // GCM mode typically uses a 12-byte IV
+     secureRandom.nextBytes(iv);
+     IvParameterSpec ivSpec = new IvParameterSpec(iv);
+     // Create an AES key from the secret
+     SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
+     // Initialize Cipher in AES/GCM/NoPadding mode
+     Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+     cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
+     // Encrypt the token
+     byte[] encryptedToken = cipher.doFinal(token.getBytes("UTF-8"));
+     String finalresultstring = Base64.encodeToString(encryptedToken, Base64.NO_WRAP);
+     String ivString = Base64.encodeToString(iv, Base64.NO_WRAP);
+     // HMAC calculation for integrity check (if needed)
+     Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+     sha256_HMAC.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
+     byte[] hmacBytes = sha256_HMAC.doFinal(token.getBytes("UTF-8"));
+     StringBuilder byteContent = new StringBuilder();
+     for (byte b : hmacBytes)
+     {
+        byteContent.append(String.format("%02x", b));
+     }
+     POST_PARAMS = finalresultstring + ":" + ivstring + ":" + byteContent + ":" + byteContent;
+     postRequest(POST_PARAMS);
+     WebSettings settings = mywebView.getSettings();
+    '''
+
+
 # Video tutorial showing how to configure Firebase for this plugin<br />
+
+https://youtu.be/T07qpqao_-E?si=LX1pAl1ZHCiyn4Fi <br/>
 	
 https://www.youtube.com/watch?v=02oymYLt3qo <br />
 	
