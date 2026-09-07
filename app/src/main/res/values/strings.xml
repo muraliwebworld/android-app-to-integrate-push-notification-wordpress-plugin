@@ -14,6 +14,8 @@
      -->
     <!-- [START fcm_default_icon_string] -->
     <string name="default_notification_channel_name" translatable="true">Weather</string>
+    <string name="notification_channel_name">PNFPB Notifications</string>
+    <string name="notification_channel_description">Push Notification for Post and BuddyPress</string>
     <!-- [END fcm_default_icon_string] -->
     <string name="msg_subscribe_failed">Failed to subscribe to weather topic</string>
     <string name="fcm_message">FCM Message</string>

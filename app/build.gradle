@@ -1,22 +1,26 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id 'com.google.dagger.hilt.android'
+    id 'com.google.devtools.ksp'
 }
 check.dependsOn 'assembleDebugAndroidTest'
 
 android {
-    compileSdk 33
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.sample.pnfpbandroid"
-        minSdk 21
-        targetSdk 33
-        versionCode 3
-        versionName "1.2"
+        minSdk 24
+        targetSdk 36
+        versionCode 4
+        versionName "2.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // API Configuration - UPDATE THIS FOR YOUR WORDPRESS SITE
+        buildConfigField "String", "API_BASE_URL", '"https://www.muraliwebworld.com/"'
     }
 
     buildTypes {
@@ -34,56 +38,80 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
-    //lint {
-    //    abortOnError false
-    //}
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+    // Disable Timber lint checks due to AGP 8.4.2 compatibility issue
+    // See: https://github.com/JakeWharton/timber/issues/347
+    lint {
+        disable 'LogNotTimber', 'StringFormatInTimber', 'ThrowableNotAtBeginning',
+                'BinaryOperationInTimber', 'TimberArgCount', 'TimberArgTypes',
+                'TimberTagLength', 'TimberExceptionLogging'
+    }
+    
     namespace 'com.sample.pnfpbandroid'
 }
 
 dependencies {
-    // implementation project(":internal:lintchecks")
-    //implementation project(":internal:chooserx")
-    implementation 'androidx.annotation:annotation:1.5.0'
+    // AndroidX Core & Kotlin Extensions
+    implementation 'androidx.annotation:annotation:1.8.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
 
-    // Required when asking for permission to post notifications (starting in Android 13)
-    implementation 'androidx.activity:activity-ktx:1.6.1'
-    implementation 'androidx.fragment:fragment-ktx:1.5.5'
+    // Activity & Fragment
+    implementation 'androidx.activity:activity-ktx:1.9.0'
+    implementation 'androidx.fragment:fragment-ktx:1.7.0'
 
-    implementation 'com.google.android.material:material:1.7.0'
+    // Material Design
+    implementation 'com.google.android.material:material:1.12.0'
 
-    // Import the Firebase BoM (see: https://firebase.google.com/docs/android/learn-more#bom)
-    implementation platform('com.google.firebase:firebase-bom:31.1.0')
-
-    // Firebase Cloud Messaging (Java)
-    implementation 'com.google.firebase:firebase-messaging'
-
-    // Firebase Cloud Messaging (Kotlin)
+    // Firebase BoM with latest versions
+    implementation platform('com.google.firebase:firebase-bom:33.1.0')
     implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-installations-ktx'
 
-    // For an optimal experience using FCM, add the Firebase SDK
-    // for Google Analytics. This is recommended, but not required.
-    implementation 'com.google.firebase:firebase-analytics'
+    // Security & Encryption
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
-    implementation 'androidx.security:security-crypto:1.1.0-alpha05'
+    // Networking - OkHttp & Retrofit
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
 
-    implementation 'com.google.firebase:firebase-installations-ktx:17.1.0'
+    // Kotlin Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.0'
 
-    implementation 'androidx.work:work-runtime:2.7.1'
+    // Dependency Injection - Hilt
+    implementation 'com.google.dagger:hilt-android:2.59.2'
+    ksp 'com.google.dagger:hilt-compiler:2.59.2'
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // Work Scheduling
+    implementation 'androidx.work:work-runtime-ktx:2.9.1'
+
+    // UI
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
-    // Testing dependencies
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.annotation:annotation:1.5.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    // JSON Parsing
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Testing Dependencies
+    androidTestImplementation 'androidx.test:core:1.6.1' // <-- ADD THIS LINE
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'junit:junit:4.13.2'
+    testImplementation 'junit:junit:4.13.2'
 
 }

@@ -1,16 +1,12 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.0'
-        classpath 'com.google.gms:google-services:4.4.1'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0-Beta'
-    }
+plugins {
+    id 'com.android.application' version '9.3.2' apply false
+    id 'com.android.library' version '9.3.2' apply false
+    // AGP 9 provides Kotlin support through its built-in Kotlin integration.
+    id 'com.google.gms.google-services' version '4.4.4' apply false
+    id 'com.google.dagger.hilt.android' version '2.59.2' apply false
+    id 'com.google.devtools.ksp' version '2.3.9' apply false
 }
 
-allprojects {
-
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
 }

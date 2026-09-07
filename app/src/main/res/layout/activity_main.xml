@@ -4,21 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.aquariumnetwork.aquariumnetwork.MainActivity">
+    tools:context="com.sample.pnfpbandroid.MainActivityModern">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
     <ProgressBar
         android:id="@+id/progress"
@@ -26,7 +25,6 @@
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        style="?android:attr/progressBarStyle"
-        />
+        style="?android:attr/progressBarStyle" />
 
 </RelativeLayout>

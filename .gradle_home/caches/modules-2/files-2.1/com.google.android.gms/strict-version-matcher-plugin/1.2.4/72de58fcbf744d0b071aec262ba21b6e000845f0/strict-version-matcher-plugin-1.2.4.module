@@ -1,0 +1,88 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.google.android.gms",
+    "module": "strict-version-matcher-plugin",
+    "version": "1.2.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.1.1",
+      "buildId": "espgzxhrlnefzhpcekhkty7x6a"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "files": [
+        {
+          "name": "strict-version-matcher-plugin-1.2.4.jar",
+          "url": "strict-version-matcher-plugin-1.2.4.jar",
+          "size": 43176,
+          "sha512": "a100d56d6a18c203edd6c51eb03e2c4145e59b1f68c155ef56cdefa34469327eefbb5ecb4a1a72febc2882616e6d8b094f4ad2db9c21e7fdc7c880517aec4b42",
+          "sha256": "df1b48b67a3c5fea7267e9e51d20de4757818b6e8ed576484c74c96ea2951200",
+          "sha1": "37f8b2ab56ecab699697602acdd598cb6d809b38",
+          "md5": "db62f04095000a2612b9a7b8e0308110"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.code.findbugs",
+          "module": "jsr305",
+          "version": {
+            "requires": "3.0.2"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "27.0.1-jre"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "strict-version-matcher-plugin-1.2.4.jar",
+          "url": "strict-version-matcher-plugin-1.2.4.jar",
+          "size": 43176,
+          "sha512": "a100d56d6a18c203edd6c51eb03e2c4145e59b1f68c155ef56cdefa34469327eefbb5ecb4a1a72febc2882616e6d8b094f4ad2db9c21e7fdc7c880517aec4b42",
+          "sha256": "df1b48b67a3c5fea7267e9e51d20de4757818b6e8ed576484c74c96ea2951200",
+          "sha1": "37f8b2ab56ecab699697602acdd598cb6d809b38",
+          "md5": "db62f04095000a2612b9a7b8e0308110"
+        }
+      ]
+    }
+  ]
+}

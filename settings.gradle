@@ -11,13 +11,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         mavenLocal()
+        maven { url "https://jitpack.io" }
     }
 }
-rootProject.name = "Sampleproject"
+
+rootProject.name = "pnfpb-android"
 include ':app'
-include ':internal:lintchecks'
-project(':internal:lintchecks').projectDir = file('../internal/lintchecks')
-include ':internal:lint'
-project(':internal:lint').projectDir = file('../internal/lint')
-include ':internal:chooserx'
-project(':internal:chooserx').projectDir = file('../internal/chooserx')

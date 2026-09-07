@@ -1,15 +1,135 @@
+# Gradle files
+.gradle/
+.gradletasknamecache
+gradle-app.setting
+
+# Android Studio IDE
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.idea/
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/modules/
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/
+.idea/.name
+.idea/misc.xml
+.idea/encodings.xml
+.idea/runConfigurations.xml
+
+# Build outputs
+/build/
+*/build/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.jar
+*.aar
+
+# Captured logs
+/captures/
+*.log
+
+# Local configuration
 local.properties
+/local.properties
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+*~
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+
+# Android
+.android/
+proguard/
+proguard-rules.pro.bak
+
+# Native build
+.cxx/
+.cxxbuild/
+
+# Security - DO NOT COMMIT
+keystore/
+*.keystore
+*.jks
+*.p12
+*.pfx
+google-services.json
+/app/google-services.json
+keys.properties
+*.pem
+*.key
+.env
+.env.local
+secrets.properties
+
+# Firebase
+Google*.plist
+
+# Lint results
+lint-results.xml
+lint-results-debug.html
+lint-report.html
+
+# Profiling
+*.trace
+*.prof
+*.perflib-data
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*~
+
+# IDE backup files
+.vscode/
+vscode.code-workspace
+*.sublime-workspace
+*.sublime-project
+
+# Compiled Java classes
+*.class
+*.pyc
+
+# OS generated files
+.Thumbs.db
+.DS_Store
+._.DS_Store
+**/.DS_Store
+
+# Android NDK
+.ndkrc
+
+# Generated files
+/app/src/main/java/com/sample/pnfpbandroid/BuildConfig.java
+
+# Test results
+/reports/
+*.xml
+
+# Gradle property files
+gradle.properties.bak

@@ -1,1 +1,41 @@
-/build
+# Build outputs
+/build/
+dist/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.jar
+*.aar
+
+# Generated files
+generated/
+gen/
+src/main/java/com/sample/pnfpbandroid/BuildConfig.java
+
+# Lint
+lint-results.xml
+lint-results-debug.html
+lint-report.html
+
+# Test results
+/test-results/
+*.xml
+
+# Profiling
+*.trace
+*.prof
+
+# IDE
+*.iml
+.idea/
+.gradle/
+
+# Compiled
+*.class
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
