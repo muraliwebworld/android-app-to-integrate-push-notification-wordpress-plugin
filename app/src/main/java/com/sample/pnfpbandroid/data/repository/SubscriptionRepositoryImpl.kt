@@ -27,11 +27,12 @@ class SubscriptionRepositoryImpl @Inject constructor(
             
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null && body.status == 200) {
-                    Timber.tag(tag).i("Subscription token sent successfully: ${body.message}")
-                    emit(Result.success(body.message))
+                if (body != null && body.effectiveStatus == 200) {
+                    val message = body.effectiveMessage ?: "Subscription updated"
+                    Timber.tag(tag).i("Subscription token sent successfully: $message")
+                    emit(Result.success(message))
                 } else {
-                    val errorMsg = body?.message ?: "Unknown error"
+                    val errorMsg = body?.effectiveMessage ?: "Unknown error"
                     Timber.tag(tag).w("Server returned error: $errorMsg")
                     emit(Result.failure(Exception(errorMsg)))
                 }

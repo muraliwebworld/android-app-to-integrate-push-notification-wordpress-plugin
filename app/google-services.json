@@ -1,29 +1,48 @@
 {
-    "project_info": {
-      "project_number": "101678953535",
-      "project_id": "pnfpb-demo2",
-      "storage_bucket": "pnfpb-demo2.fire.app"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:101678953535:android:c6a3345345c7e3ddac6c9ca",
-          "android_client_info": {
-            "package_name": "com.sample.pnfpbandroid"
-          }
-        },
-        "oauth_client": [],
-        "api_key": [
-          {
-            "current_key": "AIzaSyAw3436346JKw76JSJjp5fmxgRHVG6Y"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": []
-          }
+  "project_info": {
+    "project_number": "469549991609",
+    "project_id": "pnfpb-demo2",
+    "storage_bucket": "pnfpb-demo2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469549991609:android:407f13a72785c698fd7d68",
+        "android_client_info": {
+          "package_name": "com.pnfpb.demoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiIytdiYLjgUF5AL5OU2cGDDzFu8MIxRo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
-    ],
-    "configuration_version": "1"
-  }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469549991609:android:d6a21b29af903e1ffd7d68",
+        "android_client_info": {
+          "package_name": "com.sample.pnfpbandroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiIytdiYLjgUF5AL5OU2cGDDzFu8MIxRo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

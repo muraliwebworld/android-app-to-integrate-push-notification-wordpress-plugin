@@ -24,7 +24,8 @@ class JavaScriptInterfaceModern(
     private val context: Context,
     private val activity: Activity?,
     private val encryptedDataHolder: EncryptedDataHolder,
-    private val subscriptionRepository: SubscriptionRepository
+    private val subscriptionRepository: SubscriptionRepository,
+    private val fixedSubscriptionType: String = ""
 ) {
     
     companion object {
@@ -38,7 +39,7 @@ class JavaScriptInterfaceModern(
     @JavascriptInterface
     fun getFromAndroid(): String {
         return try {
-            val token = encryptedDataHolder.apiKey
+            val token = encryptedDataHolder.fcmToken
             Timber.tag(TAG).d("Token retrieved from Android")
             token
         } catch (e: Exception) {
@@ -55,7 +56,12 @@ class JavaScriptInterfaceModern(
      * @param subscriptionType The type of subscription (subscribe-group, unsubscribe-group, etc.)
      */
     @JavascriptInterface
-    fun postMessage(subscriptionOptions: String, subscriptionType: String = "") {
+    fun postMessage(subscriptionOptions: String) {
+        postMessage(subscriptionOptions, fixedSubscriptionType)
+    }
+
+    @JavascriptInterface
+    fun postMessage(subscriptionOptions: String, subscriptionType: String) {
         Timber.tag(TAG).d("PostMessage called with options: $subscriptionOptions, type: $subscriptionType")
         
         val lifecycleOwner = activity as? LifecycleOwner
@@ -86,7 +92,7 @@ class JavaScriptInterfaceModern(
      * Internal method to send subscription token asynchronously
      */
     private suspend fun sendSubscriptionToken(subscriptionOptions: String, subscriptionType: String) {
-        val token = encryptedDataHolder.apiKey
+        val token = encryptedDataHolder.fcmToken
         if (token.isEmpty()) {
             Timber.tag(TAG).w("No token available")
             onSubscriptionError("No authentication token available")
@@ -94,7 +100,11 @@ class JavaScriptInterfaceModern(
         }
         
         try {
-            val apiSecret = encryptedDataHolder.apiKey // This should come from secure storage
+            val apiSecret = encryptedDataHolder.apiSecret
+            if (apiSecret.isBlank() || apiSecret == "CHANGE_ME_PNFPB_API_SECRET") {
+                onSubscriptionError("PNFPB API secret is not configured")
+                return
+            }
             
             // Encrypt the token
             val encryptedToken = subscriptionRepository.encryptToken(token, apiSecret)
@@ -152,6 +162,12 @@ class JavaScriptInterfaceModern(
                 SubscriptionTokenRequest(
                     encryptedToken = encryptedToken,
                     subscriptionOptions = subscriptionOptions
+                )
+            }
+            "user-id" -> {
+                SubscriptionTokenRequest(
+                    encryptedToken = encryptedToken,
+                    userId = subscriptionOptions.toIntOrNull() ?: 0
                 )
             }
             else -> {

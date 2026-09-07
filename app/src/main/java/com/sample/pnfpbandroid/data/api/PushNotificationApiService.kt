@@ -19,7 +19,7 @@ interface PushNotificationApiService {
      * @param request The encrypted subscription token request
      * @return Response containing status and message from WordPress
      */
-    @POST("PNFPBpush/v1/subscriptiontoken")
+    @POST("wp-json/PNFPBpush/v1/subscriptiontoken")
     suspend fun sendSubscriptionToken(
         @Body request: SubscriptionTokenRequest
     ): Response<SubscriptionTokenResponse>

@@ -65,7 +65,7 @@ class PushNotificationService : FirebaseMessagingService() {
         
         // Store token securely
         try {
-            encryptedDataHolder.setApiKey(token)
+                encryptedDataHolder.setFcmToken(token)
             Timber.tag(TAG).d("FCM token saved securely")
             
             // In production, send token to backend/WordPress

@@ -31,13 +31,36 @@ data class SubscriptionTokenRequest(
  */
 data class SubscriptionTokenResponse(
     @SerializedName("status")
-    val status: Int,
-    
+    val status: Int? = null,
+
     @SerializedName("message")
-    val message: String,
+    val message: String? = null,
+
+    @SerializedName("req")
+    val requestResult: WordPressRequestResult? = null,
     
     @SerializedName("data")
     val data: Map<String, Any>? = null
+) {
+    val effectiveStatus: Int?
+        get() = status ?: requestResult?.data?.status
+
+    val effectiveMessage: String?
+        get() = message ?: requestResult?.data?.message
+}
+
+data class WordPressRequestResult(
+    @SerializedName("data")
+    val data: WordPressResponseData? = null,
+    @SerializedName("status")
+    val status: Int? = null
+)
+
+data class WordPressResponseData(
+    @SerializedName("status")
+    val status: Int? = null,
+    @SerializedName("message")
+    val message: String? = null
 )
 
 /**

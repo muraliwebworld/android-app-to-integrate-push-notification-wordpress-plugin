@@ -20,7 +20,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         
         // API Configuration - UPDATE THIS FOR YOUR WORDPRESS SITE
-        buildConfigField "String", "API_BASE_URL", '"https://www.muraliwebworld.com/"'
+        buildConfigField "String", "API_BASE_URL", '"https://www.pnfpb.com/"'
+        buildConfigField "String", "PNFPB_API_SECRET", '"6b0a1c74a56408560b58bf721ade6f80"'
     }
 
     buildTypes {

@@ -14,7 +14,8 @@ import java.security.GeneralSecurityException;
 
 public class EncryptedDataHolder {
 
-    private static final String KEY_API_KEY = "api_key";
+    private static final String KEY_API_SECRET = "api_secret";
+    private static final String KEY_FCM_TOKEN = "fcm_token";
     private static final String KEY_STORE_ALIAS = "ANEncryptedSharedPreferences";
 
     private SharedPreferences pref;
@@ -57,14 +58,22 @@ public class EncryptedDataHolder {
 
     }
 
-    public String getApiKey() {
-        return pref.getString(KEY_API_KEY, "");
+    public String getApiSecret() {
+        return pref.getString(KEY_API_SECRET, "");
     }
 
-    public void setApiKey(String apiKey) {
-        editor.putString(KEY_API_KEY, apiKey);
+    public void setApiSecret(String apiSecret) {
+        editor.putString(KEY_API_SECRET, apiSecret);
         editor.apply();
-        editor.commit();
+    }
+
+    public String getFcmToken() {
+        return pref.getString(KEY_FCM_TOKEN, "");
+    }
+
+    public void setFcmToken(String token) {
+        editor.putString(KEY_FCM_TOKEN, token);
+        editor.apply();
     }
 
 }
