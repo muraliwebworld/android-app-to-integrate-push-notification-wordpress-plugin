@@ -2,6 +2,7 @@
 .gradle/
 .gradletasknamecache
 gradle-app.setting
+.gradle_home/
 
 # Android Studio IDE
 *.iml
