@@ -63,7 +63,7 @@ It sends notification whenever new WordPress post, custom post types,new BuddyPr
 
 ### Prerequisites
 - Android Studio 2023.3+
-- Android SDK 34+
+- Android SDK 36+
 - Java 17 JDK
 
 ### Setup
@@ -319,7 +319,7 @@ Android.postMessage("5", "unsubscribe-group");
 
 ## 📊 Modernization Changes
 
-✅ Updated SDK: Android 33 → 34  
+✅ Updated SDK: Android 33 → 36 
 ✅ Updated Java: 11 → 17  
 ✅ Added: Retrofit, Coroutines, Hilt, Timber  
 ✅ Pattern: Repository Pattern, Clean Architecture  
