@@ -133,3 +133,6 @@ vscode.code-workspace
 
 # Gradle property files
 gradle.properties.bak
+.gradle_home
+.kotlin
+
