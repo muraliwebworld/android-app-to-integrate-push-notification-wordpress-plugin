@@ -158,7 +158,7 @@ class JavaScriptInterfaceModern(
                     subscriptionType = SubscriptionType.UNSUBSCRIBE_GROUP
                 )
             }
-            SubscriptionType.FRONTEND_OPTIONS -> {
+            SubscriptionType.FRONTEND_OPTIONS, "frontendsubscriptionOptions" -> {
                 SubscriptionTokenRequest(
                     encryptedToken = encryptedToken,
                     subscriptionOptions = subscriptionOptions
@@ -171,10 +171,10 @@ class JavaScriptInterfaceModern(
                 )
             }
             else -> {
-                // Default subscription
+                // The legacy Android bridge sends empty group/type/options
+                // values for the normal token registration request.
                 SubscriptionTokenRequest(
-                    encryptedToken = encryptedToken,
-                    subscriptionOptions = subscriptionOptions
+                    encryptedToken = encryptedToken
                 )
             }
         }

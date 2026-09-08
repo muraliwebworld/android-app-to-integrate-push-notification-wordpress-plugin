@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rootLayout"
+    android:fitsSystemWindows="true"
     tools:context="com.sample.pnfpbandroid.MainActivityModern">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -25,6 +27,7 @@
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:visibility="gone"
         style="?android:attr/progressBarStyle" />
 
 </RelativeLayout>

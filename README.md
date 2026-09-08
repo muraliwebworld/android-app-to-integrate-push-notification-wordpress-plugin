@@ -71,15 +71,25 @@ It sends notification whenever new WordPress post, custom post types,new BuddyPr
 # 1. Clone and open in Android Studio
 cd android-project
 
-# 2. Update your WordPress domain
-# Edit: app/src/main/java/com/sample/pnfpbandroid/di/NetworkModule.kt
-# Change: return "https://yoursite.com/"
+# 2. Add your Firebase google-services.json
+# Download from Firebase Console and copy to app/google-services.json
+# ⚠️ THIS IS REQUIRED - app will not build without it
+cp ~/Downloads/google-services.json app/google-services.json
 
 # 3. Get API Secret from WordPress
 # WordPress Admin > Settings > Push Notification for Post and BuddyPress
 # Copy: "Mobile App Secret Code"
 
-# 4. Build and run
+# 4. Update your WordPress domain
+# Edit: app/build.gradle (Line ~23)
+# Change: buildConfigField "String", "API_BASE_URL", '"https://www.pnfpb.com/"'
+# To:     buildConfigField "String", "API_BASE_URL", '"https://your-wordpress-site.com/"'
+
+# 5. Update your generated secret code from step 3 as mentioned below,
+# Edit: app/build.gradle (Line ~24)
+# Change: buildConfigField "String", "PNFPB_API_SECRET", '"your site pnfpb plugin secret api key"'
+
+# 5. Build and run
 ./gradlew build
 ./gradlew installDebug
 ```

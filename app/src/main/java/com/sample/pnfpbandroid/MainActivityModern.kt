@@ -8,10 +8,15 @@ import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ProgressBar
+import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.messaging.FirebaseMessaging
@@ -47,6 +52,7 @@ class MainActivityModern : AppCompatActivity() {
     private lateinit var webView: WebView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var encryptedDataHolder: EncryptedDataHolder
+    private lateinit var progressBar: ProgressBar
     
     // Base URL injected from NetworkModule (configured in build.gradle)
     @Inject
@@ -66,7 +72,23 @@ class MainActivityModern : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_main)
+
+        val rootLayout = findViewById<android.view.View>(R.id.rootLayout)
+        ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { view, insets ->
+            val safeInsets = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.setPadding(
+                safeInsets.left,
+                safeInsets.top,
+                safeInsets.right,
+                safeInsets.bottom
+            )
+            insets
+        }
+        ViewCompat.requestApplyInsets(rootLayout)
         
         // Initialize encrypted data holder for secure storage
         encryptedDataHolder = EncryptedDataHolder(this)
@@ -100,6 +122,7 @@ class MainActivityModern : AppCompatActivity() {
      */
     private fun setupWebView() {
         webView = findViewById(R.id.webView)
+        progressBar = findViewById(R.id.progress)
         
         // Configure WebView settings
         webView.settings.apply {
@@ -128,7 +151,34 @@ class MainActivityModern : AppCompatActivity() {
         webView.addJavascriptInterface(JavaScriptInterfaceModern(this, this, encryptedDataHolder, subscriptionRepository, "user-id"), "pnfpbuserid")
         
         // Setup WebViewClient
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                progressBar.visibility = View.VISIBLE
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                progressBar.visibility = View.GONE
+                swipeRefreshLayout.isRefreshing = false
+                // Re-run the plugin's mobile bridge hook after every page
+                // load. This registers the current token with the current
+                // WordPress user, including after login/logout navigation.
+                view?.evaluateJavascript(
+                    "javascript:(function(){if(window.PNFPB_from_Java_androidapp){window.PNFPB_from_Java_androidapp('');}})();",
+                    null
+                )
+            }
+
+            @Suppress("DEPRECATION")
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                progressBar.visibility = View.GONE
+                swipeRefreshLayout.isRefreshing = false
+            }
+        }
         
         // Load webpage (domain configured in build.gradle)
         webView.loadUrl(baseUrl)

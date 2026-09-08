@@ -31,20 +31,32 @@ This guide has complete instructions for:
 
 ---
 
-## 🎯 One Configuration Point
+## 🎯 Configuration Point
+```bash
+# 1. Clone and open in Android Studio
+cd android-project
 
-The entire app requires **only ONE change** to work with your WordPress site:
+# 2. Add your Firebase google-services.json
+# Download from Firebase Console and copy to app/google-services.json
+# ⚠️ THIS IS REQUIRED - app will not build without it
+cp ~/Downloads/google-services.json app/google-services.json
 
-### Edit: `app/build.gradle`
+# 3. Get API Secret from WordPress
+# WordPress Admin > Settings > Push Notification for Post and BuddyPress
+# Copy: "Mobile App Secret Code"
 
-Find this line (~line 14):
-```gradle
-buildConfigField "String", "API_BASE_URL", '"https://www.muraliwebworld.com/"'
-```
+# 4. Update your WordPress domain
+# Edit: app/build.gradle (Line ~23)
+# Change: buildConfigField "String", "API_BASE_URL", '"https://www.pnfpb.com/"'
+# To:     buildConfigField "String", "API_BASE_URL", '"https://your-wordpress-site.com/"'
 
-Replace `https://www.muraliwebworld.com/` with **your WordPress domain**:
-```gradle
-buildConfigField "String", "API_BASE_URL", '"https://your-wordpress-site.com/"'
+# 5. Update your generated secret code from step 3 as mentioned below,
+# Edit: app/build.gradle (Line ~24)
+# Change: buildConfigField "String", "PNFPB_API_SECRET", '"your site pnfpb plugin secret api key"'
+
+# 5. Build and run
+./gradlew build
+./gradlew installDebug
 ```
 
 ✅ **That's it!** The app will:
